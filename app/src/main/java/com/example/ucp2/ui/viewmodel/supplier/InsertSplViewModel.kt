@@ -11,6 +11,13 @@ import kotlinx.coroutines.launch
 
 
 
+fun SupplierEvent.toSupplierEntity(): Supplier = Supplier(
+    id = id,
+    nama = nama,
+    kontak = kontak,
+    alamat = alamat,
+)
+
 data class SupplierEvent(
     var id: String = "",
     var nama: String = "",
