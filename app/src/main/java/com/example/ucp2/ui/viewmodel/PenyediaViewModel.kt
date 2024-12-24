@@ -16,12 +16,6 @@ import com.example.ucp2.ui.viewmodel.supplier.InsertSplViewModel
 object PenyediaViewModel {
 
     val Factory = viewModelFactory {
-        initializer {
-            HomeTokoViewModel(
-                TokoApp().ContainerApp.repositorySpl,
-                TokoApp().ContainerApp.repositoryBrg
-            )
-        }
 
         initializer {
             InsertSplViewModel(
