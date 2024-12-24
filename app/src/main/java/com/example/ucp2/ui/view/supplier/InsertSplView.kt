@@ -32,7 +32,62 @@ import com.example.ucp2.ui.viewmodel.supplier.SupplierEvent
 import kotlinx.coroutines.launch
 
 
+@Composable
+fun InsertSplView(
+    onBack: () -> Unit,
+    onNavigate: () -> Unit,
+    modifier: Modifier = Modifier,
+    viewModel: InsertSplViewModel = viewModel(factory = PenyediaViewModel.Factory)
+) {
+    val uiState = viewModel.uiState
+    val snackbarHostState = remember { SnackbarHostState() }
+    val coroutineScope = rememberCoroutineScope()
 
+    LaunchedEffect(uiState.snackbarMessage) {
+        uiState.snackbarMessage?.let { message ->
+            coroutineScope.launch {
+                snackbarHostState.showSnackbar(message)
+                viewModel.resetSplSnackBarMessage()
+            }
+        }
+    }
+
+    Scaffold(
+        modifier = modifier,
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
+        topBar = {
+            TopAppBar(
+                onBack = onBack,
+                showBackButton = true,
+                judul = "Toko Murah Jaya",
+                description = "Tambah data supplier",
+                modifier = Modifier
+                    .fillMaxWidth()
+            )
+        }
+    ) { padding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(top = 120.dp, start = 20.dp, end = 20.dp)
+        ) {
+
+            InsertBodySpl(
+
+                uiState = uiState,
+                onValueChange = { updateEvent ->
+                    viewModel.updateState(updateEvent)
+                },
+                onClick = {
+                    viewModel.saveDataSpl() {
+                        onNavigate()
+                    }
+
+                }
+            )
+        }
+    }
+}
 
 
 @Composable
