@@ -20,6 +20,24 @@ class InsertSplViewModel(private val RepositorySpl: RepositorySpl) : ViewModel()
             )
     }
 
+    private fun validateFields(): Boolean {
+        val event = uiState.supplierEvent
+
+        val errorState = FormSplErrorState(
+            id = if (event.id.isNotEmpty()) null else "ID tidak boleh kosong",
+            nama = if (event.nama.isNotEmpty()) null else "Nama tidak boleh kosong",
+            kontak = if (event.kontak.isNotEmpty()) null else "Kontak tidak boleh kosong",
+            alamat = if (event.alamat.isNotEmpty()) null else "Alamat tidak boleh kosong",
+        )
+
+        uiState = uiState.copy(
+            isEntryValid = errorState,
+        )
+
+        return errorState.isValid()
+
+    }
+
 
 }
 
