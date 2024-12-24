@@ -9,7 +9,19 @@ import com.example.ucp2.data.entity.Supplier
 import com.example.ucp2.repository.RepositorySpl
 import kotlinx.coroutines.launch
 
+class InsertSplViewModel(private val RepositorySpl: RepositorySpl) : ViewModel() {
 
+    var uiState by mutableStateOf(SplUIState())
+
+    fun updateState(supplierEvent: SupplierEvent) {
+        uiState = uiState.copy(
+            supplierEvent = supplierEvent,
+
+            )
+    }
+
+
+}
 
 data class SplUIState(
     val supplierEvent: SupplierEvent = SupplierEvent(),
