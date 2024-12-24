@@ -38,6 +38,39 @@ class InsertSplViewModel(private val RepositorySpl: RepositorySpl) : ViewModel()
 
     }
 
+    fun saveDataSpl(onSuccess: () -> Unit) {
+        val currentEvent = uiState.supplierEvent
+        if (validateFields()) {
+            viewModelScope.launch {
+                val isIdExists = RepositorySpl.isIdExists(currentEvent.id)
+
+                if (isIdExists) {
+                    uiState = uiState.copy(
+                        snackbarMessage = "ID sudah digunakan"
+                    )
+                } else {
+                    try {
+                        RepositorySpl.insertSpl(currentEvent.toSupplierEntity())
+                        uiState = uiState.copy(
+                            snackbarMessage = "Data berhasil disimpan",
+                            supplierEvent = SupplierEvent(),
+                            isEntryValid = FormSplErrorState()
+                        )
+                        onSuccess()
+                    } catch (e: Exception) {
+                        uiState = uiState.copy(
+                            snackbarMessage = "Data gagal disimpan"
+                        )
+                    }
+                }
+            }
+        } else {
+            uiState = uiState.copy(
+                snackbarMessage = "Input tidak valid. Periksa kembali data anda."
+            )
+        }
+    }
+
 
 }
 
