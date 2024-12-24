@@ -20,3 +20,35 @@ data class HomeSplUIState(
     val errorMessage: String = ""
 )
 
+class HomeSplViewModel(
+    private val repositorySpl: RepositorySpl
+) : ViewModel() {
+    val homeSplUIState: StateFlow<HomeSplUIState> = repositorySpl.getAllSpl()
+        .filterNotNull()
+        .map {
+            HomeSplUIState(
+                listSpl = it.toList(),
+                isLoading = false,
+            )
+        }
+        .onStart {
+            emit(HomeSplUIState(isLoading = true))
+            delay(900)
+        }
+        .catch {
+            emit(
+                HomeSplUIState(
+                    isLoading = false,
+                    isError = true,
+                    errorMessage = it.message ?: "Terjadi kesalahan"
+                )
+            )
+        }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = HomeSplUIState(
+                isLoading = true,
+            )
+        )
+}
