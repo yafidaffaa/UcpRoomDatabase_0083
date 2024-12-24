@@ -36,6 +36,38 @@ import kotlinx.coroutines.launch
 
 
 @Composable
+fun InsertBodySpl(
+    onValueChange: (SupplierEvent) -> Unit,
+    uiState: SplUIState,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit
+) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .verticalScroll(rememberScrollState()),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        FormSupplier(
+            supplierEvent = uiState.supplierEvent,
+            onValueChange = onValueChange,
+            errorState = uiState.isEntryValid,
+            modifier = Modifier.fillMaxWidth()
+
+        )
+        Button(
+            onClick = onClick,
+            modifier = Modifier.fillMaxWidth(),
+            colors = ButtonDefaults.buttonColors(containerColor = Color.Black)
+        ) {
+            Text(text = "Simpan", color = Color.White)
+        }
+    }
+}
+
+
+@Composable
 fun FormSupplier(
     supplierEvent: SupplierEvent = SupplierEvent(),
     onValueChange: (SupplierEvent) -> Unit = {},
