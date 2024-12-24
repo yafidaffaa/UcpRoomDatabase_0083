@@ -51,7 +51,46 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 
+@Composable
+fun HomeSplView(
+    viewModelSpl: HomeSplViewModel = viewModel(factory = PenyediaViewModel.Factory),
+    onAddSpl: () -> Unit = { },
+    onBack: () -> Unit,
+    modifier: Modifier = Modifier
+){
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                judul = "Toko Murah Jaya",
+                description = "Daftar Supplier",
+                showBackButton = true,
+                onBack = onBack,
+                modifier = modifier
+            )
+        },
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = onAddSpl,
+                shape = MaterialTheme.shapes.medium,
+                modifier = Modifier.padding(16.dp),
+                containerColor = Color.Black
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = "Tambah Supplier",
+                    tint = Color.White
+                )
+            }
+        }
+    ) {innerPadding ->
+        val homeSplUIState by viewModelSpl.homeSplUIState.collectAsState()
 
+        BodyHomeSplView(
+            homeSplUIState = homeSplUIState,
+            modifier = Modifier.padding(innerPadding)
+        )
+    }
+}
 
 @Composable
 fun BodyHomeSplView(
