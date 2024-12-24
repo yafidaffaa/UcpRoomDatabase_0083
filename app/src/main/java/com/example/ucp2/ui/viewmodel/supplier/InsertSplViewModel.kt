@@ -71,7 +71,9 @@ class InsertSplViewModel(private val RepositorySpl: RepositorySpl) : ViewModel()
         }
     }
 
-
+    fun resetSplSnackBarMessage() {
+        uiState = uiState.copy(snackbarMessage = null)
+    }
 }
 
 data class SplUIState(
