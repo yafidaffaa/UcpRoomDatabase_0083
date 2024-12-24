@@ -54,6 +54,60 @@ import androidx.compose.ui.graphics.Color
 
 
 @Composable
+fun BodyHomeSplView(
+    homeSplUIState: HomeSplUIState,
+    onClick: (String) -> Unit = { },
+    modifier: Modifier = Modifier
+){
+    val coroutineScope = rememberCoroutineScope()
+    val snackbarHostState = remember { SnackbarHostState() }
+    when{
+        homeSplUIState.isLoading -> {
+            Box(
+                modifier=modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ){
+                CircularProgressIndicator()
+            }
+        }
+        homeSplUIState.isError -> {
+            LaunchedEffect(homeSplUIState.errorMessage) {
+                homeSplUIState.errorMessage?.let {message ->
+                    coroutineScope.launch {
+                        snackbarHostState.showSnackbar(message)
+                    }
+                }
+            }
+        }
+        homeSplUIState.listSpl.isEmpty() -> {
+            Box(
+                modifier = modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(text = "Tidak ada data Supplier.",
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(16.dp)
+                )
+            }
+        }
+
+        else -> {
+            ListSupplier(
+                listSpl = homeSplUIState.listSpl,
+                onClick = {
+                    onClick(it)
+                    println(
+                        it
+                    )
+                },
+                modifier = modifier
+            )
+        }
+    }
+}
+
+@Composable
 fun ListSupplier(
     listSpl: List<Supplier>,
     modifier: Modifier = Modifier,
